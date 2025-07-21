@@ -5,7 +5,7 @@ We created the python package called `scKanFormer` that uses `scanpy` ans `torch
 
 ### Requirements
 
-+ Linux/UNIX/Windows system
++ Windows system
 + Python >= 3.8
 + torch == 1.7.1
 
