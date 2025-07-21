@@ -84,3 +84,4 @@ new_adata = scKanFormer.pre(query_adata, model_weight_path = <path to optional w
 + `./my_project/gene2token_weights.csv` : The weights matrix of genes to tokens
 
 > **Warning:** the `var_names` (genes) of the `ref_adata` and `query_adata` must be consistent and in the same order.
+#### Datasets: You can get the datasets by the Accession ID in Table1.
