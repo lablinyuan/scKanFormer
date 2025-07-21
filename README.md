@@ -1,6 +1,6 @@
 
 ## Package: `scKanFormer`
-###scKanFormer: A cell type annotation model for scRNA-seq data based on the Transformer framework.
+### scKanFormer: A cell type annotation model for scRNA-seq data based on the Transformer framework.
 We created the python package called `scKanFormer` that uses `scanpy` ans `torch` to explainablely annotate cell type on single-cell RNA-seq data.
 
 ### Requirements
