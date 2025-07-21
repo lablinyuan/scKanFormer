@@ -64,107 +64,7 @@ def balance_populations(data):
     return np.delete(balanced_data,0,axis=0)
 
 
-# def add_zinb_noise(data, noise_fraction=0.1):
-#     """根据平均值动态地添加零膨胀负二项分布噪声并显示进度条"""
-#     n_samples, n_features = data.shape
-#     noisy_data = data.copy()
-#     num_noisy_samples = int(n_samples * noise_fraction)
-#     noisy_indices = np.random.choice(n_samples, num_noisy_samples, replace=False)
-#
-#     for i in tqdm(noisy_indices, desc="Adding Dynamic ZINB Noise"):
-#         for j in range(n_features):
-#             mean = data[i, j]
-#             if mean > 0:
-#                 # 动态调整零膨胀概率和负二项分布参数
-#                 pi = min(0.1, 1 / (mean + 1))  # 根据平均值动态调整零膨胀概率
-#                 #theta = 0.8  # 根据平均值动态调整负二项分布参数
-#                 theta = max(0.1, mean / 10)
-#                 # 判断是否为零膨胀
-#                 if np.random.rand() < pi:
-#                     noisy_data[i, j] = 0
-#                 else:
-#                     p = mean / (mean + theta)
-#                     noisy_data[i, j] = np.random.negative_binomial(theta, p)
-#             else:
-#                 noisy_data[i, j] = 0
-#     return noisy_data
-# def add_negbin_noise(data, noise_fraction=0.15):
-#     """根据平均值动态地添加负二项分布噪声并显示进度条"""
-#     n_samples, n_features = data.shape
-#     noisy_data = data.copy()
-#     num_noisy_samples = int(n_samples * noise_fraction)
-#     noisy_indices = np.random.choice(n_samples, num_noisy_samples, replace=False)
-#
-#     for i in tqdm(noisy_indices, desc="Adding Dynamic Negative Binomial Noise"):
-#         for j in range(n_features):
-#             mean = data[i, j]
-#             if mean > 0:
-#                 # 动态调整负二项分布参数
-#                 theta = max(0.1, mean / 10)
-#                 p = mean / (mean + theta)
-#                 noisy_data[i, j] = np.random.negative_binomial(theta, p)
-#             else:
-#                 noisy_data[i, j] = 0
-#     return noisy_data
-###
-# import numpy as np
-# import pandas as pd
-# import torch
-# from sklearn.preprocessing import LabelEncoder
 
-# def add_gaussian_noise(data, noise_level):
-#     """
-#     给数据添加高斯噪声。
-#
-#     参数:
-#     data (np.array): 输入数据。
-#     noise_level (float): 高斯噪声的标准差。
-#
-#     返回:
-#     np.array: 添加高斯噪声后的数据。
-#     """
-#     noise = np.random.normal(0, noise_level, data.shape)
-#     return data + noise
-
-# def splitDataSetG(adata, label_name='Celltype', tr_ratio=0.7, noise_level=0.15, noise_proportion=0.1):
-#     """
-#     将数据集划分为训练集和测试集，并按比例添加高斯噪声。
-#
-#     参数:
-#     adata: 注释数据矩阵。
-#     label_name (str): 标签列的名称。
-#     tr_ratio (float): 训练数据的比例。
-#     noise_level (float): 高斯噪声的标准差。
-#     noise_proportion (float): 添加噪声的数据比例。
-#
-#     返回:
-#     tuple: 训练集和验证集，以及标签信息和基因名称。
-#     """
-#     label_encoder = LabelEncoder()
-#     el_data = adata.to_df()
-#     el_data[label_name] = adata.obs[label_name].astype('str')
-#     genes = el_data.columns.values[:-1]
-#     el_data = np.array(el_data)
-#     el_data[:, -1] = label_encoder.fit_transform(el_data[:, -1])
-#     inverse = label_encoder.inverse_transform(range(0, np.max(el_data[:, -1]) + 1))
-#     el_data = el_data.astype(np.float32)
-#     el_data = balance_populations(data=el_data)
-#
-#     # 按比例添加高斯噪声
-#     if noise_level > 0 and noise_proportion > 0:
-#         num_samples = int(el_data.shape[0] * noise_proportion)
-#         indices = np.random.choice(el_data.shape[0], num_samples, replace=False)
-#         el_data[indices, :-1] = add_gaussian_noise(el_data[indices, :-1], noise_level)
-#
-#     n_genes = len(el_data[0]) - 1
-#     train_size = int(len(el_data) * tr_ratio)
-#     train_dataset, valid_dataset = torch.utils.data.random_split(el_data, [train_size, len(el_data) - train_size])
-#     exp_train = torch.from_numpy(np.array(train_dataset)[:, :n_genes].astype(np.float32))
-#     label_train = torch.from_numpy(np.array(train_dataset)[:, -1].astype(np.int64))
-#     exp_valid = torch.from_numpy(np.array(valid_dataset)[:, :n_genes].astype(np.float32))
-#     label_valid = torch.from_numpy(np.array(valid_dataset)[:, -1].astype(np.int64))
-#     return exp_train, label_train, exp_valid, label_valid, inverse, genes
-###
 def splitDataSet(adata,label_name='Celltype', tr_ratio= 0.7): 
     """ 
     Split data set into training set and test set.
@@ -181,7 +81,7 @@ def splitDataSet(adata,label_name='Celltype', tr_ratio= 0.7):
     inverse = label_encoder.inverse_transform(range(0,np.max(el_data[:,-1])+1))
     el_data = el_data.astype(np.float32)
     el_data = balance_populations(data = el_data)
-    # 尝试添加噪声
+    # 
     #el_data[:, :-1] = add_negbin_noise(el_data[:, :-1])
 
     n_genes = len(el_data[1])-1
@@ -194,112 +94,7 @@ def splitDataSet(adata,label_name='Celltype', tr_ratio= 0.7):
     return exp_train, label_train, exp_valid, label_valid, inverse, genes
 
 
-# def splitDataSetNew(adata,label_name='Celltype', tr_ratio= 0.7):
-#     """
-#     Split data set into training set and test set.
-#
-#     """
-#     label_encoder = LabelEncoder()
-#     el_data = pd.DataFrame(todense(adata),index=np.array(adata.obs_names).tolist(), columns=np.array(adata.var_names).tolist())
-#     el_data[label_name] = adata.obs[label_name].astype('str')
-#     #el_data = pd.read_table(data_path,sep=",",header=0,index_col=0)
-#     genes = el_data.columns.values[:-1]
-#     el_data = np.array(el_data)
-#     # el_data = np.delete(el_data,-1,axis=1)
-#     el_data[:,-1] = label_encoder.fit_transform(el_data[:,-1])
-#     inverse = label_encoder.inverse_transform(range(0,np.max(el_data[:,-1])+1))
-#     el_data = el_data.astype(np.float32)
-#     #新的采样方式
-#     mdo = MDO(k=10, k1_frac=0.18, seed=0, prop=0.99)
-#     el_data[:, :-1] = add_zinb_noise(el_data[:, :-1])
-#     el_data = balance_populations(data = el_data)
-#     n_genes = len(el_data[1])-1
-#     train_size = int(len(el_data) * tr_ratio)
-#     train_indices = np.random.choice(len(el_data), size=train_size, replace=False)
-#     valid_indices = list(set(range(len(el_data))) - set(train_indices))
-#
-#     train_dataset = el_data[train_indices]
-#     valid_dataset = el_data[valid_indices]
-#
-#     X_train = train_dataset[:, :n_genes]
-#     y_train = train_dataset[:, -1]
-#
-#     X_train_resampled, y_train_resampled = mdo.fit_resample(X_train, y_train)
-#     #train_dataset, valid_dataset = torch.utils.data.random_split(el_data, [train_size,len(el_data)-train_size])
-#     exp_train = torch.from_numpy(X_train_resampled.astype(np.float32))
-#     label_train = torch.from_numpy(y_train_resampled.astype(np.int64))
-#     exp_valid = torch.from_numpy(valid_dataset[:, :n_genes].astype(np.float32))
-#     label_valid = torch.from_numpy(valid_dataset[:, -1].astype(np.int64))
-#     return exp_train, label_train, exp_valid, label_valid, inverse, genes
-###################################################################################
-# import torch
-# import torch.nn as nn
-# import torch.optim as optim
-# from torch.utils.data import DataLoader, random_split, TensorDataset
-# from sklearn.preprocessing import LabelEncoder
-# import pandas as pd
-# import numpy as np
-# from scipy.sparse import csr_matrix
 
-# class ComplexVAE(nn.Module):
-#     def __init__(self, input_dim, latent_dim):
-#         super(ComplexVAE, self).__init__()
-#         self.encoder = nn.Sequential(
-#             nn.Linear(input_dim, 512),
-#             nn.BatchNorm1d(512),
-#             nn.ReLU(),
-#             nn.Linear(512, 256),
-#             nn.BatchNorm1d(256),
-#             nn.ReLU(),
-#         )
-#         self.fc_mu = nn.Linear(256, latent_dim)
-#         self.fc_logvar = nn.Linear(256, latent_dim)
-#         self.decoder = nn.Sequential(
-#             nn.Linear(latent_dim, 256),
-#             nn.BatchNorm1d(256),
-#             nn.ReLU(),
-#             nn.Linear(256, 512),
-#             nn.BatchNorm1d(512),
-#             nn.ReLU(),
-#             nn.Linear(512, input_dim),
-#             nn.Sigmoid(),
-#         )
-#
-#     def encode(self, x):
-#         h = self.encoder(x)
-#         return self.fc_mu(h), self.fc_logvar(h)
-#
-#     def reparameterize(self, mu, logvar):
-#         std = torch.exp(0.5 * logvar)
-#         eps = torch.randn_like(std)
-#         return mu + eps * std
-#
-#     def decode(self, z):
-#         return self.decoder(z)
-#
-#     def forward(self, x):
-#         mu, logvar = self.encode(x)
-#         z = self.reparameterize(mu, logvar)
-#         return self.decode(z), mu, logvar
-#
-#     def loss_function(self, recon_x, x, mu, logvar):
-#         BCE = nn.functional.binary_cross_entropy(recon_x, x, reduction='sum')
-#         KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
-#         return BCE + KLD
-#
-# def train_vae(vae, train_dataloader, epochs, learning_rate=1e-3):
-#     optimizer = optim.Adam(vae.parameters(), lr=learning_rate)
-#     vae.train()
-#     for epoch in range(epochs):
-#         train_loss = 0
-#         for batch in train_dataloader:
-#             optimizer.zero_grad()
-#             recon_batch, mu, logvar = vae(batch[0])
-#             loss = vae.loss_function(recon_batch, batch[0], mu, logvar)
-#             loss.backward()
-#             train_loss += loss.item()
-#             optimizer.step()
-#         print(f"Epoch {epoch + 1}, Loss: {train_loss / len(train_dataloader.dataset)}")
 
 def split(adata, label_name='Celltype', tr_ratio=0.7, latent_dim=10, epochs=20, batch_size=64):
     label_encoder = LabelEncoder()
