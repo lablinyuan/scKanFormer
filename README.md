@@ -66,7 +66,7 @@ new_adata = scKanFormer.pre(query_adata, model_weight_path = <path to optional w
 #### Input:
 
 + `query_adata`: an `AnnData` object of query dataset .
-+ `model_weight_path`: the weights generated during `scTrans.train`, like: `'./weights20220607/model-6.pth'`.
++ `model_weight_path`: the weights generated during `scTrans.train`, like: `'./weights20240607/model-6.pth'`.
 + `project`: name of the folder build in training step, like: `my_project` or `<gmt_path>_20xxxxxx`.
 
 #### Output:
