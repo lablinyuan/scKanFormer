@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-From Uchida Takumi https://github.com/uchida-takumi/CustomizedLinear/blob/master/CustomizedLinear.py
-extended torch.nn module which cusmize connection.
-This code base on https://pytorch.org/docs/stable/notes/extending.html
-"""
+
 import math
 import torch
 import torch.nn as nn
