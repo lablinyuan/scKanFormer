@@ -25,14 +25,6 @@ The `scKanFormer` python package is in the folder scKanFormer. You can simply in
 pip install .
 ```
 
-Alternatively, you can also install the package directly from GitHub via
-
-```
-pip install git+https://github.com/JackieHanLab/scKanFormer.git
-```
-
-
-
 ## Usage
 
 ### Step 1: Training the model
